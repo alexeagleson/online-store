@@ -1,13 +1,5 @@
 <?php 
 
-// This function isn't really necessary with prepared statements, but it's there if ever needed
-function string_for_db($your_string) {
-	// Makes a string of text nice and pretty and ready to store in a database varchar field
-	$your_string = addslashes($your_string);
-	$your_string = str_replace ( "\"", "&quot;", $your_string );
-	return $your_string;
-}
-
 function line_break($number_of_breaks) {
 	// Displays number of HTML line breaks equal to value of argument
 	for ($i = 1; $i <= $number_of_breaks; $i++) {
