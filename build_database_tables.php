@@ -3,6 +3,11 @@
 // Create the STORE table in the database from scratch
 function create_store_table($delete_existing = False)  {
 	
+	// If table already exists then we are done here
+	if (check_if_table_exists('STORE') and !$delete_existing) {
+		return True;
+	}
+	
 	// Will delete the existing table if "True" is passed as an argument
 	if ($delete_existing){
 		$query_text = "DROP TABLE STORE";
@@ -25,6 +30,11 @@ function create_store_table($delete_existing = False)  {
 
 // Create the PRODUCTS table in the database from scratch
 function create_products_table($delete_existing = False)  {
+	
+	// If table already exists then we are done here
+	if (check_if_table_exists('PRODUCTS') and !$delete_existing) {
+		return True;
+	}
 	
 	// Will delete the existing table if "True" is passed as an argument
 	if ($delete_existing){
@@ -56,6 +66,48 @@ function create_products_table($delete_existing = False)  {
 	
 	return False;
 }
+
+// Create the CART table in the database from scratch
+function create_cart_table($delete_existing = False)  {
+	
+	// If table already exists then we are done here
+	if (check_if_table_exists('CART') and !$delete_existing) {
+		return True;
+	}
+	
+	// Will delete the existing table if "True" is passed as an argument
+	if ($delete_existing){
+		$query_text = "DROP TABLE CART";
+		if (!run_basic_query($query_text)) {
+			echo "Deleted existing table failed."; line_break(2);
+		} else {
+			echo "Table deleted."; line_break(2);
+		}
+	}
+	
+	// Create the table
+	$query_text = "CREATE TABLE CART
+				(customer_id int,
+				product_id int,
+				quantity int)";
+		
+	// Run the query, if it fails to make the table, print an error to the screen
+	$results = run_basic_query($query_text);
+	if ($results) { return True; } else { return False; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Fill in the PRODUCTS table with values form the CSV
 function populate_products_from_csv() {

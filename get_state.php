@@ -1,5 +1,6 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'].'/sql_connect.php');
+include_once($_SERVER['DOCUMENT_ROOT'].'/buttons_and_menus.php');
 
 global $link;
 
@@ -39,9 +40,15 @@ if(!empty($_POST["country_id"])) {
 
 	if (!$results) { query_error($query); return False; }
 	
+	?>
+	<label>Cost:</label><br/><br/>
+	<?php
+	
 	foreach($results as $state) {
 		echo $state["cost"];
 	}
+	
+
 }
 
 mysqli_close($link);

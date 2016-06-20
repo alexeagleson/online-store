@@ -34,6 +34,7 @@ function sql_connect() {
 
 function run_basic_query($query_text) {
 	global $link;
+	
 	$query = $link->prepare($query_text);
 	if(!$query->execute()) {
 		query_error($query_text); return False;
@@ -56,5 +57,23 @@ function get_all_results_2d_array($query, $fetch_method = 'num') {
 	}
 	return $new_array;
 }
+
+// Returns True if a given table name already exists, False if not
+function check_if_table_exists($table_name) {
+	global $link;
+
+	$query_text = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ?";
+	$query = $link->prepare($query_text);
+	$query->bind_param("s", $table_name);
+	if(!$query->execute()) {
+		query_error($query_text); return False;
+	}
+	$results = get_all_results_2d_array($query);
+	if (count($results) > 0) {
+		return True;
+	}
+	return False;
+}
+
 
 ?>

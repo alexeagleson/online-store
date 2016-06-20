@@ -12,17 +12,7 @@ session_start();
 sql_connect();
 
 
-// Get all relevant data about this object
-$query_text = "SELECT DISTINCT aisle FROM PRODUCTS";
-$query = $link->prepare($query_text);
-if(!$query->execute()) {
-	query_error($query_text); return False;
-}
-$results = get_all_results_2d_array($query, 'both');
 
-if (!$results) { query_error($query); return False; }
-
-mysqli_close($link);
 
 ?>
 <html>
@@ -87,6 +77,89 @@ function selectCountry(val) {
 
 
 
+<?
+
+if(!empty($_POST["make_purchase"])) {
+	
+	var_dump($_POST); line_break(5);
+	
+	$customer_id = 0;
+	$product_purchased = (int)$_POST["state"];
+	$quantity_purchased = (int)$_POST["purchase_quantity"];
+	
+	$query_text = "INSERT INTO CART (customer_id, product_id, quantity) VALUES (?, ?, ?)";
+	$query = $link->prepare($query_text);
+	$query->bind_param("iii", $customer_id, $product_purchased, $quantity_purchased);
+	if(!$query->execute()) {
+		query_error($query_text); return False;
+	}
+	echo "Product added to cart";
+	
+	
+}
+
+
+
+
+
+
+create_store_table();
+create_products_table();
+create_cart_table();
+
+
+
+// Get all relevant data about this object
+$query_text = "SELECT product_name, SUM(quantity) AS total_quantity, (cost * SUM(quantity)) AS total_cost FROM CART INNER JOIN PRODUCTS ON CART.product_id = PRODUCTS.product_id GROUP BY product_name";
+$query = $link->prepare($query_text);
+if(!$query->execute()) {
+	query_error($query_text); return False;
+}
+$results = get_all_results_2d_array($query, 'both');
+
+if (!$results) { 
+	query_error($query); return False;
+} else {
+	$grand_total = 0;
+	foreach($results as $item_in_cart) {
+		$grand_total += $item_in_cart['total_cost'];
+		echo $item_in_cart['product_name'] . ' x ' . $item_in_cart['total_quantity'] . ': Total $' . $item_in_cart['total_cost']; line_break(1);
+	}
+	line_break(2);
+	echo "Grand Total: $" . $grand_total;
+	line_break(2);
+}
+
+
+
+
+
+
+
+
+
+
+// Get all relevant data about this object
+$query_text = "SELECT DISTINCT aisle FROM PRODUCTS";
+$query = $link->prepare($query_text);
+if(!$query->execute()) {
+	query_error($query_text); return False;
+}
+$results = get_all_results_2d_array($query, 'both');
+
+if (!$results) { query_error($query); return False; }
+
+
+
+
+
+
+
+?>
+
+
+
+<form action="index.php" method="post">
 <div class="frmDronpDown">
 	<div class="row">
 		<label>Aisle:</label><br/>
@@ -110,13 +183,26 @@ function selectCountry(val) {
 		</select>
 	</div>
 	<div class="row">
-		<label>Cost:</label><br/><br/>
 		<label name="state" id="product-info">
 	</div>
-		<?php basic_button('a', 'b', 'Purchase'); ?>
-	</div>
-</div>
+	
+	<?php
+	line_break(2);
+	
+	?>
+	<label>Quantity:</label><br/><br/>
+	<?php
+	$options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+	basic_drop_menu('purchase_quantity', 'purchase_quantity_id', $options, $options);
+	basic_button('make_purchase', 'make_purchase_id', 'Purchase');
+	?>
+	
 
+</div>
+</form>
+		
+		
+<?php mysqli_close($link); ?>
 
 
 </body>

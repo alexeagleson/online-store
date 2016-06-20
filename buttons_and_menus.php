@@ -32,7 +32,7 @@ function basic_text_field_hidden($field_name, $field_id, $field_text) {
 	<?php
 }
 
-function basic_drop_menu($menu_name, $menu_id, $menu_return_values, $menu_options, $default_option = 5, $function = '') {
+function basic_drop_menu($menu_name, $menu_id, $menu_return_values, $menu_options, $default_option = 0, $function = '') {
 	// Creates a simple drop down menu with choices based on array $menu_options
 	?>
 	<form action="index.php" method="post">
