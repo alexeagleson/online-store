@@ -52,7 +52,9 @@ function create_products_table($delete_existing = False)  {
 				product_name varchar(255),
 				cost decimal(4,2),
 				retail decimal(4,2),
-				aisle int)";
+				category int,
+				description varchar(255),
+				photo varchar(255))";
 		
 	// Run the query, if it fails to make the table, print an error to the screen
 	$results = run_basic_query($query_text);
@@ -150,12 +152,14 @@ function populate_products_from_csv() {
 		$product_name = $all_product_info[$i][1];
 		$cost =(float)$all_product_info[$i][2];
 		$retail = (float)$all_product_info[$i][3];
-		$aisle = (int)$all_product_info[$i][4];
+		$category = (int)$all_product_info[$i][4];
+		$description = $all_product_info[$i][5];
+		$photo = $all_product_info[$i][6];
 			
 		// Get all relevant data about this object
-		$query_text = "INSERT INTO PRODUCTS (product_id, product_name, cost, retail, aisle) VALUES (?, ?, ?, ?, ?)";
+		$query_text = "INSERT INTO PRODUCTS (product_id, product_name, cost, retail, category, description, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		$query = $link->prepare($query_text);
-		$query->bind_param("isddi", $product_id, $product_name, $cost, $retail, $aisle);
+		$query->bind_param("isddiss", $product_id, $product_name, $cost, $retail, $category, $description, $photo);
 		if(!$query->execute()) {
 			query_error($query_text); return False;
 		}

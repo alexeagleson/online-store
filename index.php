@@ -73,33 +73,25 @@ if(!empty($_POST["make_purchase"])) {
 	
 }
 
+$query_text = "SELECT * FROM PRODUCTS WHERE photo <> 'Null'";
+$query = $link->prepare($query_text);
+if(!$query->execute()) {
+	query_error($query_text); return False;
+}
+$results = get_all_results_2d_array($query, 'both');
+
+$list_of_items_with_photo = [];
+
+if ($results) {
+	foreach($results as $photo_result) {
+		array_push($list_of_items_with_photo, $photo_result);
+	}
+}
+
+$number_of_tiers = (int)(count($list_of_items_with_photo) / 3);
+
+
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -130,7 +122,7 @@ if(!empty($_POST["make_purchase"])) {
       </ul>
       <ul class="nav navbar-nav navbar-right">
 	  
-        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " My Account"; } ?></a></li>
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " Login"; } ?></a></li>
         <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>
@@ -138,58 +130,31 @@ if(!empty($_POST["make_purchase"])) {
 </nav>
   
    
+<?php 
+$current_image_index = 0;
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">BLACK FRIDAY DEAL</div>
-        <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="panel panel-danger">
-        <div class="panel-heading">BLACK FRIDAY DEAL</div>
-        <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="panel panel-success">
-        <div class="panel-heading">BLACK FRIDAY DEAL</div>
-        <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-      </div>
-    </div>
-  </div>
-</div><br>
+for ($i = 0; $i < $number_of_tiers; $i++) { ?>
+	<div class="container">
+	  <div class="row">
+	  <?php for ($j = 0; $j < 3; $j++) {
+		  if (isset($list_of_items_with_photo[$current_image_index])) { ?>
+			<div class="col-sm-4">
+			  <div class="panel panel-primary">
+				<div class="panel-heading"><?php echo $list_of_items_with_photo[$current_image_index]['product_name'] . "... only $" . $list_of_items_with_photo[$current_image_index]['retail'] . "! [Category ". $list_of_items_with_photo[$current_image_index]['category'] . "]"; ?></div>
+				<div class="panel-body"><img src="<?php echo '/photos/' . $list_of_items_with_photo[$current_image_index]['photo']; ?>" class="img-responsive" style="width:100%"></div>
+				<div class="panel-footer"><?php echo $list_of_items_with_photo[$current_image_index]['description']; ?></div>
+			  </div>
+			</div>
+		<?php 
+			$current_image_index++;
+		} ?>
+	<?php } ?>
+	</div><br>
+</div>
+<?php } ?>
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">BLACK FRIDAY DEAL</div>
-        <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">BLACK FRIDAY DEAL</div>
-        <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">BLACK FRIDAY DEAL</div>
-        <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-      </div>
-    </div>
-  </div>
-</div><br><br>
+
+
 
 <footer class="container-fluid text-center">
   <p>Online Store Copyright</p>

@@ -102,7 +102,7 @@ sql_connect();
         <li><a href="products.php">Products</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " My Account"; } ?></a></li>
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " Login"; } ?></a></li>
         <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>
@@ -122,7 +122,7 @@ if (isset($_SESSION["current_user"])) {
 	$customer_id = $_SESSION["current_user"];
 	
 	// Get all relevant data about this object
-	$query_text = "SELECT product_name, SUM(quantity) AS total_quantity, (cost * SUM(quantity)) AS total_cost FROM CART INNER JOIN PRODUCTS ON CART.product_id = PRODUCTS.product_id WHERE customer_id = ? GROUP BY product_name";
+	$query_text = "SELECT product_name, SUM(quantity) AS total_quantity, (retail * SUM(quantity)) AS total_retail FROM CART INNER JOIN PRODUCTS ON CART.product_id = PRODUCTS.product_id WHERE customer_id = ? GROUP BY product_name";
 	$query = $link->prepare($query_text);
 	$query->bind_param("s", $customer_id);
 	if(!$query->execute()) {
@@ -520,7 +520,7 @@ if (isset($_SESSION["current_user"])) {
                                         <tr>
                                             <th>Product Name</th>
                                             <th>Quantity</th>
-                                            <th>Cost</th>
+                                            <th>Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -531,12 +531,12 @@ if (isset($_SESSION["current_user"])) {
 											} else {
 												$grand_total = 0;
 												foreach($results as $item_in_cart) {
-													$grand_total += $item_in_cart['total_cost'];
+													$grand_total += $item_in_cart['total_retail'];
 													?>
 													<tr>
 														<td><?php echo $item_in_cart['product_name'] ?></td>
 														<td class="center"><?php echo $item_in_cart['total_quantity'] ?></td>
-														<td class="center"><?php echo "$" . $item_in_cart['total_cost'] ?></td>
+														<td class="center"><?php echo "$" . $item_in_cart['total_retail'] ?></td>
 													</tr>
 													<?php
 												}

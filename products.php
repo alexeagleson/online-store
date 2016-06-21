@@ -95,7 +95,7 @@ function selectCountry(val) {
         <li class="active"><a href="products.php">Products</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " My Account"; } ?></a></li>
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " Login"; } ?></a></li>
         <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>
@@ -106,7 +106,7 @@ function selectCountry(val) {
 <?php 
 
 // Get all relevant data about this object
-$query_text = "SELECT DISTINCT aisle FROM PRODUCTS";
+$query_text = "SELECT DISTINCT category FROM PRODUCTS ORDER BY category";
 $query = $link->prepare($query_text);
 if(!$query->execute()) {
 	query_error($query_text); return False;
@@ -127,12 +127,10 @@ if (!$results) { query_error($query); return False; }
 			<select name="country" id="country-list" class="demoInputBox" onChange="getState(this.value);">
 				<option value="">Select Category</option>
 				<?php
-				$i = 1;
 				foreach($results as $country) {
 					?>
-					<option value="<?php echo $country["aisle"]; ?>"><?php echo 'Category ' . $i; ?></option>
+					<option value="<?php echo $country["category"]; ?>"><?php echo 'Category ' . $country["category"]; ?></option>
 					<?php
-					$i++;
 				}
 				?>
 			</select>

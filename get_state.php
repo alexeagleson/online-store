@@ -8,7 +8,7 @@ sql_connect();
 
 if(!empty($_POST["country_id"])) {
 	
-	$query_text = "SELECT * FROM PRODUCTS WHERE aisle = ?";
+	$query_text = "SELECT * FROM PRODUCTS WHERE category = ? ORDER BY product_name";
 	$query = $link->prepare($query_text);
 	$query->bind_param("i", $_POST["country_id"]);
 	if(!$query->execute()) {
@@ -25,7 +25,7 @@ if(!empty($_POST["country_id"])) {
 	<?php
 	foreach($results as $state) {
 		?>
-		<option value="<?php echo $state["product_id"]; ?>"><?php echo $state["product_name"] . " ($" . $state["cost"] . ")"; ?></option>
+		<option value="<?php echo $state["product_id"]; ?>"><?php echo $state["product_name"] . " ($" . $state["retail"] . ")"; ?></option>
 		<?php
 	}
 }
