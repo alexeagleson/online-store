@@ -44,23 +44,27 @@ session_start();
 sql_connect();
 
 
-create_store_table();
-create_products_table();
-create_cart_table();
+create_store_table(False);
+create_products_table(False);
+create_cart_table(False);
+create_customers_table(False);
+
 
 
 
 if(!empty($_POST["make_purchase"])) {
 	
-	var_dump($_POST); line_break(5);
 	
-	$customer_id = 0;
+	$customer_id = $_SESSION["current_user"];
+	
+	
+	
 	$product_purchased = (int)$_POST["state"];
 	$quantity_purchased = (int)$_POST["purchase_quantity"];
 	
 	$query_text = "INSERT INTO CART (customer_id, product_id, quantity) VALUES (?, ?, ?)";
 	$query = $link->prepare($query_text);
-	$query->bind_param("iii", $customer_id, $product_purchased, $quantity_purchased);
+	$query->bind_param("sii", $customer_id, $product_purchased, $quantity_purchased);
 	if(!$query->execute()) {
 		query_error($query_text); return False;
 	}
@@ -125,7 +129,8 @@ if(!empty($_POST["make_purchase"])) {
         <li><a href="products.php">Products</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+	  
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " My Account"; } ?></a></li>
         <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>

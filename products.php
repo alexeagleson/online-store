@@ -95,7 +95,7 @@ function selectCountry(val) {
         <li class="active"><a href="products.php">Products</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " My Account"; } ?></a></li>
         <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>
@@ -147,25 +147,28 @@ if (!$results) { query_error($query); return False; }
 		</div>
 	</div>
 	
-	
-	<div class="form-group">
-		<label for="quantity" class="col-sm-2 control-label">Quantity</label>
-		<div class="col-sm-10">
-			<?php
-			$options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-			basic_drop_menu('purchase_quantity', 'purchase_quantity_id', $options, $options);
-			?>
+	<?php if (isset($_SESSION["current_user"])) { ?>
+		<div class="form-group">
+			<label for="quantity" class="col-sm-2 control-label">Quantity</label>
+			<div class="col-sm-10">
+				<?php
+				$options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+				basic_drop_menu('purchase_quantity', 'purchase_quantity_id', $options, $options);
+				?>
+			</div>
 		</div>
-	</div>
-	
-	<div class="form-group">
-		<label for="purchase" class="col-sm-2 control-label"></label>
-		<div class="col-sm-10">
-			<?php
-			basic_button('make_purchase', 'make_purchase_id', 'Purchase', $return_to_page = 'products.php');
-			?>
+		
+		<div class="form-group">
+			<label for="purchase" class="col-sm-2 control-label"></label>
+			<div class="col-sm-10">
+				<?php
+				basic_button('make_purchase', 'make_purchase_id', 'Purchase', $return_to_page = 'products.php');
+				?>
+			</div>
 		</div>
-	</div>
+	<?php } else { 
+		echo "Please log in";
+	} ?>
 	
 	
 </form> 

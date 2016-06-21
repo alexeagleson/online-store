@@ -102,7 +102,7 @@ sql_connect();
         <li><a href="products.php">Products</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " My Account"; } ?></a></li>
         <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>
@@ -116,13 +116,29 @@ sql_connect();
 
 <?php
 
-// Get all relevant data about this object
-$query_text = "SELECT product_name, SUM(quantity) AS total_quantity, (cost * SUM(quantity)) AS total_cost FROM CART INNER JOIN PRODUCTS ON CART.product_id = PRODUCTS.product_id GROUP BY product_name";
-$query = $link->prepare($query_text);
-if(!$query->execute()) {
-	query_error($query_text); return False;
+
+if (isset($_SESSION["current_user"])) {
+	
+	$customer_id = $_SESSION["current_user"];
+	
+	// Get all relevant data about this object
+	$query_text = "SELECT product_name, SUM(quantity) AS total_quantity, (cost * SUM(quantity)) AS total_cost FROM CART INNER JOIN PRODUCTS ON CART.product_id = PRODUCTS.product_id WHERE customer_id = ? GROUP BY product_name";
+	$query = $link->prepare($query_text);
+	$query->bind_param("s", $customer_id);
+	if(!$query->execute()) {
+		query_error($query_text); return False;
+	}
+	if (!$query) { return False; }
+	
+	$results = get_all_results_2d_array($query, 'both');
+	if (!$results) { return False; }
+
+} else {
+	echo "PLEASE LOG IN"; line_break(5);
+	return False;
 }
-$results = get_all_results_2d_array($query, 'both');
+
+
 
 
 
@@ -538,6 +554,13 @@ $results = get_all_results_2d_array($query, 'both');
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+			
+						<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<input id="submit" name="submit_your_order" type="submit" value="Submit Your Order" class="btn btn-primary">
+							<label for="username" class="col-sm-3 control-label"><?php echo "Grand Total: $" . $grand_total; ?></label>
+						</div>
+					</div>
             
         </div>
         <!-- /#page-wrapper -->

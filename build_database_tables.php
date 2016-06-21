@@ -87,9 +87,37 @@ function create_cart_table($delete_existing = False)  {
 	
 	// Create the table
 	$query_text = "CREATE TABLE CART
-				(customer_id int,
+				(customer_id varchar(255),
 				product_id int,
 				quantity int)";
+		
+	// Run the query, if it fails to make the table, print an error to the screen
+	$results = run_basic_query($query_text);
+	if ($results) { return True; } else { return False; }
+}
+
+// Create the CUSTOMERS table in the database from scratch
+function create_customers_table($delete_existing = False)  {
+	
+	// If table already exists then we are done here
+	if (check_if_table_exists('CUSTOMERS') and !$delete_existing) {
+		return True;
+	}
+	
+	// Will delete the existing table if "True" is passed as an argument
+	if ($delete_existing){
+		$query_text = "DROP TABLE CUSTOMERS";
+		if (!run_basic_query($query_text)) {
+			echo "Deleted existing table failed."; line_break(2);
+		} else {
+			echo "Table deleted."; line_break(2);
+		}
+	}
+	
+	// Create the table
+	$query_text = "CREATE TABLE CUSTOMERS
+				(customer_id varchar(255),
+				password varchar(255))";
 		
 	// Run the query, if it fails to make the table, print an error to the screen
 	$results = run_basic_query($query_text);
