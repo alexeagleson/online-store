@@ -117,12 +117,39 @@ sql_connect();
 <?php
 
 
+
+
+if (isset($_POST['product_id_to_remove'])) {
+
+	// Get all relevant data about this object
+	$query_text = "DELETE FROM CART WHERE product_id = ? AND customer_id = ?";
+	$query = $link->prepare($query_text);
+	$query->bind_param("is", $_POST['product_id_to_remove'], $_SESSION["current_user"]);
+	if(!$query->execute()) {
+		query_error($query_text); return False;
+	}
+}
+
+if (isset($_POST['submit_your_order'])) {
+	// Get all relevant data about this object
+	$query_text = "DELETE FROM CART WHERE customer_id = ?";
+	$query = $link->prepare($query_text);
+	$query->bind_param("s", $_SESSION["current_user"]);
+	if(!$query->execute()) {
+		query_error($query_text); return False;
+	}
+	
+	echo "THANK YOU FOR YOUR ORDER"; line_break(2);
+}
+
+
+
 if (isset($_SESSION["current_user"])) {
 	
 	$customer_id = $_SESSION["current_user"];
 	
 	// Get all relevant data about this object
-	$query_text = "SELECT product_name, SUM(quantity) AS total_quantity, (retail * SUM(quantity)) AS total_retail FROM CART INNER JOIN PRODUCTS ON CART.product_id = PRODUCTS.product_id WHERE customer_id = ? GROUP BY product_name";
+	$query_text = "SELECT CART.product_id, product_name, SUM(quantity) AS total_quantity, retail, (retail * SUM(quantity)) AS total_retail FROM CART INNER JOIN PRODUCTS ON CART.product_id = PRODUCTS.product_id WHERE customer_id = ? GROUP BY product_name";
 	$query = $link->prepare($query_text);
 	$query->bind_param("s", $customer_id);
 	if(!$query->execute()) {
@@ -519,8 +546,10 @@ if (isset($_SESSION["current_user"])) {
                                     <thead>
                                         <tr>
                                             <th>Product Name</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
+											<th>Unit Price</th>
+											<th>Quantity</th>
+                                            <th>Total Price</th>
+											<th>Remove</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -535,8 +564,15 @@ if (isset($_SESSION["current_user"])) {
 													?>
 													<tr>
 														<td><?php echo $item_in_cart['product_name'] ?></td>
+														<td class="center"><?php echo "$" . $item_in_cart['retail'] ?></td>
 														<td class="center"><?php echo $item_in_cart['total_quantity'] ?></td>
 														<td class="center"><?php echo "$" . $item_in_cart['total_retail'] ?></td>
+														<td>	
+															<form action="cart.php" method="post">
+																<input type="hidden" name="product_id_to_remove" value = "<?php echo $item_in_cart['product_id'] ?>">
+																<input type="submit" id="remove_item" name="remove_item" value="Remove">
+															</form>
+														</td>
 													</tr>
 													<?php
 												}
@@ -557,8 +593,11 @@ if (isset($_SESSION["current_user"])) {
 			
 						<div class="form-group">
 						<div class="col-sm-10 col-sm-offset-2">
-							<input id="submit" name="submit_your_order" type="submit" value="Submit Your Order" class="btn btn-primary">
+						<form action="cart.php" method="post">
 							<label for="username" class="col-sm-3 control-label"><?php echo "Grand Total: $" . $grand_total; ?></label>
+							<input id="submit" name="submit_your_order" type="submit" value="Submit Your Order" class="btn btn-primary">
+						</form>
+							
 						</div>
 					</div>
             

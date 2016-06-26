@@ -48,8 +48,7 @@ create_store_table(False);
 create_products_table(False);
 create_cart_table(False);
 create_customers_table(False);
-
-
+create_descriptions_table(False);
 
 
 if(!empty($_POST["make_purchase"])) {
@@ -140,9 +139,9 @@ for ($i = 0; $i < $number_of_tiers; $i++) { ?>
 		  if (isset($list_of_items_with_photo[$current_image_index])) { ?>
 			<div class="col-sm-4">
 			  <div class="panel panel-primary">
-				<div class="panel-heading"><?php echo $list_of_items_with_photo[$current_image_index]['product_name'] . "... only $" . $list_of_items_with_photo[$current_image_index]['retail'] . "! [Category ". $list_of_items_with_photo[$current_image_index]['category'] . "]"; ?></div>
-				<div class="panel-body"><img src="<?php echo '/photos/' . $list_of_items_with_photo[$current_image_index]['photo']; ?>" class="img-responsive" style="width:100%"></div>
-				<div class="panel-footer"><?php echo $list_of_items_with_photo[$current_image_index]['description']; ?></div>
+				<div class="panel-heading"><?php echo $list_of_items_with_photo[$current_image_index]['product_name'] . "... only $" . $list_of_items_with_photo[$current_image_index]['retail'] . "!"; ?></div>
+				<div class="panel-body"><img src="<?php echo '/photos/' . $list_of_items_with_photo[$current_image_index]['product_id'] . ".jpg"; ?>" class="img-responsive" style="width:100%"></div>
+				<div class="panel-footer"><?php echo generate_random_description(); ?></div>
 			  </div>
 			</div>
 		<?php 

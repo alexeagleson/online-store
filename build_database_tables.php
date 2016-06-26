@@ -53,7 +53,6 @@ function create_products_table($delete_existing = False)  {
 				cost decimal(4,2),
 				retail decimal(4,2),
 				category int,
-				description varchar(255),
 				photo varchar(255))";
 		
 	// Run the query, if it fails to make the table, print an error to the screen
@@ -62,6 +61,41 @@ function create_products_table($delete_existing = False)  {
 	
 		// Enter the product information into the table
 		if (populate_products_from_csv()) {
+			return True;
+		}
+	}
+	
+	return False;
+}
+
+// Create the DESCRIPTIONS table in the database from scratch
+function create_descriptions_table($delete_existing = False)  {
+	
+	// If table already exists then we are done here
+	if (check_if_table_exists('DESCRIPTIONS') and !$delete_existing) {
+		return True;
+	}
+	
+	// Will delete the existing table if "True" is passed as an argument
+	if ($delete_existing){
+		$query_text = "DROP TABLE DESCRIPTIONS";
+		if (!run_basic_query($query_text)) {
+			echo "Deleted existing table failed."; line_break(2);
+		} else {
+			echo "Table deleted."; line_break(2);
+		}
+	}
+	
+	// Create the table
+	$query_text = "CREATE TABLE DESCRIPTIONS
+				(adjective varchar(255))";
+		
+	// Run the query, if it fails to make the table, print an error to the screen
+	$results = run_basic_query($query_text);
+	if ($results) { 
+	
+		// Enter the product information into the table
+		if (populate_descriptions_from_csv()) {
 			return True;
 		}
 	}
@@ -136,15 +170,34 @@ function create_customers_table($delete_existing = False)  {
 
 
 
-
-
+// Fill in the DESCRIPTIONS table with values form the CSV
+function populate_descriptions_from_csv() {
+	global $link;
+	
+	$all_product_info = array_map('str_getcsv', file('food_descriptions.csv'));
+	
+	// Loops through all of the info in the CSV and enter it into database.  First line (i = 0) contains header info
+	for ($i = 1; $i < count($all_product_info); $i++) {
+		$adjective = $all_product_info[$i][0];
+			
+		// Get all relevant data about this object
+		$query_text = "INSERT INTO DESCRIPTIONS (adjective) VALUES (?)";
+		$query = $link->prepare($query_text);
+		$query->bind_param("s", $adjective);
+		if(!$query->execute()) {
+			query_error($query_text); return False;
+		}
+	}
+	
+	// If we've reached this point, everything worked
+	return True;
+}
 
 // Fill in the PRODUCTS table with values form the CSV
 function populate_products_from_csv() {
 	global $link;
 	
 	$all_product_info = array_map('str_getcsv', file('product_assortment.csv'));
-	//var_dump($all_product_info);
 	
 	// Loops through all of the info in the CSV and enter it into database.  First line (i = 0) contains header info
 	for ($i = 1; $i < count($all_product_info); $i++) {
@@ -153,13 +206,12 @@ function populate_products_from_csv() {
 		$cost =(float)$all_product_info[$i][2];
 		$retail = (float)$all_product_info[$i][3];
 		$category = (int)$all_product_info[$i][4];
-		$description = $all_product_info[$i][5];
-		$photo = $all_product_info[$i][6];
+		$photo = $all_product_info[$i][5];
 			
 		// Get all relevant data about this object
-		$query_text = "INSERT INTO PRODUCTS (product_id, product_name, cost, retail, category, description, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		$query_text = "INSERT INTO PRODUCTS (product_id, product_name, cost, retail, category, photo) VALUES (?, ?, ?, ?, ?, ?)";
 		$query = $link->prepare($query_text);
-		$query->bind_param("isddiss", $product_id, $product_name, $cost, $retail, $category, $description, $photo);
+		$query->bind_param("isddis", $product_id, $product_name, $cost, $retail, $category, $photo);
 		if(!$query->execute()) {
 			query_error($query_text); return False;
 		}
