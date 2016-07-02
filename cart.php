@@ -1,39 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <style>
-    /* Remove the navbar's default rounded borders and increase the bottom margin */
-    .navbar {
-      margin-bottom: 50px;
-      border-radius: 0;
-    }
-    
-    /* Remove the jumbotron's default bottom margin */
-     .jumbotron {
-      margin-bottom: 0;
-    }
-   
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-    }
-  </style>
-  
-  
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	
      <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Get Rid of This Later</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -59,55 +34,39 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-  
-  
-  
-</head>
 
 <?php
 
 include($_SERVER['DOCUMENT_ROOT'].'/sql_connect.php');
 include($_SERVER['DOCUMENT_ROOT'].'/build_database_tables.php');
 include($_SERVER['DOCUMENT_ROOT'].'/buttons_and_menus.php');
+include($_SERVER['DOCUMENT_ROOT'].'/top_and_bottom.php');
+
+display_top_section();
 
 global $link;
 session_start();
 sql_connect();
 
+
 ?>
+  
+  
+
+  
+ 
+ 
+ <?php
+ 
+ display_nav_bar();
+ 
+ ?>
+  
+</head>
+
 
 
 <body>
-
-<div class="jumbotron">
-  <div class="container text-center">
-    <h1>Online Store</h1>
-    <p>Mission, Vission & Values</p>
-  </div>
-</div>
-
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Logo</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a href="index.php">Home</a></li>
-        <li><a href="products.php">Products</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " Login"; } ?></a></li>
-        <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
 
 
@@ -117,6 +76,14 @@ sql_connect();
 <?php
 
 
+if (number_of_items_in_cart() == False) {
+	?>
+	<div align = "center">
+	<label>Your cart is empty.</label>
+	</div>
+	<br>
+	<?php
+}
 
 
 if (isset($_POST['product_id_to_remove'])) {
@@ -139,7 +106,12 @@ if (isset($_POST['submit_your_order'])) {
 		query_error($query_text); return False;
 	}
 	
-	echo "THANK YOU FOR YOUR ORDER"; line_break(2);
+	?>
+	<div align = "center">
+	<label>Thank you for your order.</label>
+	</div>
+	<br>
+	<?php
 }
 
 
@@ -159,28 +131,10 @@ if (isset($_SESSION["current_user"])) {
 	
 	$results = get_all_results_2d_array($query, 'both');
 	if (!$results) { return False; }
+	
+	
 
-} else {
-	echo "PLEASE LOG IN"; line_break(5);
-	return False;
-}
-
-
-
-
-
-
-?>
-
-
-
-
-
-
-
-
-
-
+		?>
 
 
 
@@ -196,7 +150,7 @@ if (isset($_SESSION["current_user"])) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+                <a class="navbar-brand" href="index.html">Get Rid of This</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -440,13 +394,13 @@ if (isset($_SESSION["current_user"])) {
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> My Shopping Cart</a>
                         </li>
                         <li>
                             <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i> Get Rid of This Stuff Later<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="panels-wells.html">Panels and Wells</a>
@@ -521,7 +475,7 @@ if (isset($_SESSION["current_user"])) {
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Tables</h1>
+                    <h1 class="page-header">My Shopping Cart</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -530,7 +484,7 @@ if (isset($_SESSION["current_user"])) {
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            DataTables Advanced Tables
+                            My Cart
                         </div>
 						
 						
@@ -553,32 +507,30 @@ if (isset($_SESSION["current_user"])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-										
-											<?php
-											if (!$results) { 
-												query_error($query); return False;
-											} else {
-												$grand_total = 0;
-												foreach($results as $item_in_cart) {
-													$grand_total += $item_in_cart['total_retail'];
-													?>
-													<tr>
-														<td><?php echo $item_in_cart['product_name'] ?></td>
-														<td class="center"><?php echo "$" . $item_in_cart['retail'] ?></td>
-														<td class="center"><?php echo $item_in_cart['total_quantity'] ?></td>
-														<td class="center"><?php echo "$" . $item_in_cart['total_retail'] ?></td>
-														<td>	
-															<form action="cart.php" method="post">
-																<input type="hidden" name="product_id_to_remove" value = "<?php echo $item_in_cart['product_id'] ?>">
-																<input type="submit" id="remove_item" name="remove_item" value="Remove">
-															</form>
-														</td>
-													</tr>
-													<?php
-												}
+										<?php
+										if (!$results) { 
+											query_error($query); return False;
+										} else {
+											$grand_total = 0;
+											foreach($results as $item_in_cart) {
+												$grand_total += $item_in_cart['total_retail'];
+												?>
+												<tr>
+													<td class="center"><?php echo $item_in_cart['product_name'] ?></td>
+													<td class="center"><?php echo "$" . $item_in_cart['retail'] ?></td>
+													<td class="center"><?php echo $item_in_cart['total_quantity'] ?></td>
+													<td class="center"><?php echo "$" . $item_in_cart['total_retail'] ?></td>
+													<td>	
+														<form action="cart.php" method="post">
+															<input type="hidden" name="product_id_to_remove" value = "<?php echo $item_in_cart['product_id'] ?>">
+															<input type="submit" id="remove_item" name="remove_item" value="Remove">
+														</form>
+													</td>
+												</tr>
+												<?php
 											}
-											?>
-                                        
+										}
+										?>
                                     </tbody>
                                 </table>
                             </div>
@@ -591,15 +543,16 @@ if (isset($_SESSION["current_user"])) {
                 <!-- /.col-lg-12 -->
             </div>
 			
-						<div class="form-group">
-						<div class="col-sm-10 col-sm-offset-2">
-						<form action="cart.php" method="post">
-							<label for="username" class="col-sm-3 control-label"><?php echo "Grand Total: $" . $grand_total; ?></label>
-							<input id="submit" name="submit_your_order" type="submit" value="Submit Your Order" class="btn btn-primary">
-						</form>
-							
-						</div>
-					</div>
+<div class="form-group" style="font-size:18px">
+	<div class="col-sm-6">
+		<label for="submit_your_order" class="col-sm-6 control-label"><?php echo "Grand Total: $" . $grand_total; ?></label>
+	</div>
+	<div class="col-sm-6">
+		<form action="cart.php" method="post">
+			<input id="submit" name="submit_your_order" type="submit" value="Submit Your Order" class="btn btn-primary">
+		</form>
+	</div>
+</div>
             
         </div>
         <!-- /#page-wrapper -->
@@ -635,8 +588,21 @@ if (isset($_SESSION["current_user"])) {
 
 
 
+<?php
 
-   
+} else {
+	?>
+	<div align = "center">
+	<label>Please log in to view your cart.</label>
+	</div>
+	<br><br>
+	<?php
+}
+
+
+
+
+?>
    
    
 <footer class="container-fluid text-center">

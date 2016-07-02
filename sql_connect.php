@@ -89,7 +89,7 @@ function generate_random_description() {
 
 	
 	$finish_options = ['taste sensation', 'adventure', 'sensory explosion', 'flavour burst', "experience that you won't forget", 'meal for a great price', 'ingredient that fits any recipe', 'beloved family favourite', 'dish for people on-the-go'];
-	$pairs_options = ['pairs great with', 'try it with', 'a complement to', 'enhances the subtle flavour of', 'best tried in combination with'];
+	$pairs_options = ['pairs great with', 'try it with', 'a wonderful complement to', 'enhances the subtle flavour of', 'best tried in combination with'];
 	$vowels = ['a', 'e', 'i', 'o', 'u'];
 	
 	
@@ -140,6 +140,37 @@ function generate_random_description() {
 	
 		
 }
+
+
+function number_of_items_in_cart() {
+	global $link;
+	
+	if (isset($_SESSION["current_user"])) {
+		
+		$customer_id = $_SESSION["current_user"];
+		
+		// Get all relevant data about this object
+		$query_text = "SELECT SUM(quantity) AS total_quantity FROM CART WHERE customer_id = ?";
+		$query = $link->prepare($query_text);
+		$query->bind_param("s", $customer_id);
+		if(!$query->execute()) {
+			query_error($query_text); return False;
+		}
+		if (!$query) { return False; }
+		
+		$results = get_all_results_2d_array($query);
+		if (!$results) { return False; }
+		
+		return $results[0];
+		
+	} else {
+		return False;
+	}
+	
+	
+}
+
+
 
 
 
