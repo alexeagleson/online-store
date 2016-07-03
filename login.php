@@ -139,7 +139,7 @@ if (isset($_POST["logout"])) {
 		<h1 class="page-header text-center"><? echo "Welcome " . $_SESSION["current_user"]; ?></h1>
 		<form class="form-horizontal" role="form" method="post" action="login.php">
 			<div class="form-actions">
-				<div class="col-lg-12">
+				<div class="col-lg-12" align="center">
 					<input id="submit" name="logout" type="submit" value="Log Out" class="btn btn-primary">
 					<br><br>
 				</div>

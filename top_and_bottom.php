@@ -1,8 +1,16 @@
 <?php
 
+global $store_name;
+global $store_tagline;
+
+$store_name = "Online Store Sample";
+$store_tagline = "Come Share our Love for Delicious Food or Whatever";
+
 function display_top_section() {
+	global $store_name;
+	global $store_tagline;
 	?>
-	<title>Grocery Store Sample</title>
+	<title><?php echo $store_name; ?></title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -11,13 +19,14 @@ function display_top_section() {
 	<style>
 		/* Remove the navbar's default rounded borders and increase the bottom margin */
 		.navbar {
-			margin-bottom: 50px;
+			margin-bottom: 30px;
 			border-radius: 0;
 		}
 
 		/* Remove the jumbotron's default bottom margin */
 			.jumbotron {
 			margin-bottom: 0;
+			padding: 10px;
 		}
 
 		/* Add a gray background color and some padding to the footer */
@@ -30,8 +39,8 @@ function display_top_section() {
 	
 	<div class="jumbotron">
 		<div class="container text-center">
-			<h1 style ="font-family:Curlz MT">Dogman's Grocery Doghouse</h1>
-			<p style ="font-family:Freestyle Script; font-size:36px">Come Share our Love for Delicious Food or Whatever</p>
+			<h1 style ="font-family:Curlz MT"><?php echo $store_name; ?></h1>
+			<h2 style ="font-family:Freestyle Script;"><?php echo $store_tagline; ?></h2>
 		</div>
 	</div>
 	<?php
@@ -50,7 +59,7 @@ function display_nav_bar() {
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="index.php">Home</a></li>
+					<li><a href="index.php">Home</a></li>
 					<li><a href="products.php">Products</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -65,10 +74,12 @@ function display_nav_bar() {
 }
 
 function display_bottom_section() {
+	global $store_name;
+	global $store_tagline;
 	?>
 	<footer class="container-fluid text-center">
-	<p>Online Store Copyright</p>
-	<form class="form-inline">Get deals:
+	<p>Get the latest deals from <?php echo $store_name; ?></p>
+	<form class="form-inline">
 		<input type="email" class="form-control" size="50" placeholder="Email Address">
 		<button type="button" class="btn btn-danger">Sign Up</button>
 	</form>
