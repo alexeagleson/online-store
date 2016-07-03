@@ -13,6 +13,7 @@
 <?php
 
 include($_SERVER['DOCUMENT_ROOT'].'/sql_connect.php');
+include($_SERVER['DOCUMENT_ROOT'].'/general_functions.php');
 include($_SERVER['DOCUMENT_ROOT'].'/build_database_tables.php');
 include($_SERVER['DOCUMENT_ROOT'].'/buttons_and_menus.php');
 include($_SERVER['DOCUMENT_ROOT'].'/top_and_bottom.php');
@@ -32,10 +33,10 @@ $result = '';
 $message_to_display = False;
 
 if (isset($_POST["logout"])) {
+	// User has clicked the logout button, delete their session
 	unset($_SESSION["current_user"]);
 } else if (isset($_POST["login"])) {
-
-	// Check if customer exists
+	// User has clicked the login button, check credentials entered into the username/password fields
 	$username_entered = strtolower($_POST['username']);
 	
 	$query_text = "SELECT * FROM CUSTOMERS WHERE customer_id = ?";
@@ -73,7 +74,7 @@ if (isset($_POST["logout"])) {
 
 } else if (isset($_POST["create_new_account"])) {
 
-	// Check if customer exists
+	// User has clicked the register new acount button button, check credentials entered into the username/password fields against existing
 	$username_entered = strtolower($_POST['username']);
 	
 	$query_text = "SELECT * FROM CUSTOMERS WHERE customer_id = ?";
@@ -93,7 +94,6 @@ if (isset($_POST["logout"])) {
 		if(!$query->execute()) {
 			query_error($query_text); return False;
 		}
-		
 		$message_to_display = "Account has been registered.";
 		
 		$_SESSION["current_user"] = $username_entered;
@@ -105,6 +105,7 @@ if (isset($_POST["logout"])) {
 
 display_nav_bar();
 
+// Displays the various possible error/confirmation messages established above on the $message_to_display variable
 if ($message_to_display) {
 	?>
 	<div align = "center">
@@ -118,11 +119,13 @@ if ($message_to_display) {
 </head>
 <body>
 
+<!-- This section displays the text fields to enter username/password information -->
 <div class="container">
 	<div class="row">
 		<?php 
 		if(isset($_SESSION["current_user"])) {
 			?>
+			<!-- If user is already logged in, simply display welcome info -->
 			<h1 class="page-header text-center"><? echo "Welcome " . $_SESSION["current_user"]; ?></h1>
 			<form class="form-horizontal" role="form" method="post" action="login.php">
 				<div class="form-actions">

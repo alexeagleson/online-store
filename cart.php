@@ -29,6 +29,7 @@
 <?php
 
 include($_SERVER['DOCUMENT_ROOT'].'/sql_connect.php');
+include($_SERVER['DOCUMENT_ROOT'].'/general_functions.php');
 include($_SERVER['DOCUMENT_ROOT'].'/build_database_tables.php');
 include($_SERVER['DOCUMENT_ROOT'].'/buttons_and_menus.php');
 include($_SERVER['DOCUMENT_ROOT'].'/top_and_bottom.php');

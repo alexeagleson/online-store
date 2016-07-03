@@ -1,5 +1,6 @@
 <?php
 
+// A combination function that creates all the necessary database tables one by one
 function build_all_database_tables($delete_existing) {
 	create_store_table($delete_existing);
 	create_products_table($delete_existing);
@@ -168,16 +169,6 @@ function create_customers_table($delete_existing = False)  {
 	if ($results) { return True; } else { return False; }
 }
 
-
-
-
-
-
-
-
-
-
-
 // Fill in the DESCRIPTIONS table with values form the CSV
 function populate_descriptions_from_csv() {
 	global $link;
@@ -228,8 +219,5 @@ function populate_products_from_csv() {
 	// If we've reached this point, everything worked
 	return True;
 }
-
-
-
 	
 ?>

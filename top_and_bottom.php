@@ -6,7 +6,9 @@ global $store_tagline;
 $store_name = "Super Grocery World";
 $store_tagline = "Come Share our Love for Delicious Food or Whatever";
 
+// Code for displaying the large header at the top of the screen including the store name and tagline
 function display_top_section() {
+	
 	global $store_name;
 	global $store_tagline;
 	?>
@@ -35,17 +37,19 @@ function display_top_section() {
 			padding: 25px;
 		}
 	</style>
+	
 	</head>	
 	
 	<div class="jumbotron">
 		<div class="container text-center">
-			<h1 style ="font-family:Curlz MT"><?php echo $store_name; ?></h1>
-			<h2 style ="font-family:Freestyle Script;"><?php echo $store_tagline; ?></h2>
+			<h1 style ="font-family: Georgia, sans-serif;"><?php echo $store_name; ?></h1>
+			<h3 style ="font-family: Tahoma, Geneva, sans-serif; font-style: italic;"><?php echo $store_tagline; ?></h2>
 		</div>
 	</div>
 	<?php
 }
 
+// Displays the main nav bar including the home, products, login in and cart buttons.  Is collapsable when shrinking for smaller screens
 function display_nav_bar() {
 	?>
 	<nav class="navbar navbar-inverse">
@@ -73,6 +77,7 @@ function display_nav_bar() {
 	<?php
 }
 
+// Displays the section prompting user to enter their email address for a weekly flyer
 function display_bottom_section() {
 	global $store_name;
 	global $store_tagline;

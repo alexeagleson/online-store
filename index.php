@@ -5,6 +5,7 @@
 <?php
 
 include($_SERVER['DOCUMENT_ROOT'].'/sql_connect.php');
+include($_SERVER['DOCUMENT_ROOT'].'/general_functions.php');
 include($_SERVER['DOCUMENT_ROOT'].'/build_database_tables.php');
 include($_SERVER['DOCUMENT_ROOT'].'/buttons_and_menus.php');
 include($_SERVER['DOCUMENT_ROOT'].'/top_and_bottom.php');
@@ -13,10 +14,10 @@ global $link;
 session_start();
 sql_connect();
 
+// Creates all the tables in the SQL database from scratch - if False only creates if they don't exist, if True deletes and re-creates
 build_all_database_tables(False);
 
 display_top_section();
-
 display_nav_bar();
 
 ?>
@@ -29,6 +30,7 @@ display_nav_bar();
 $current_image_index = 0;
 $list_of_items_with_photo = [];
 
+// Display on the main page, all items in the database with a photo, rounded to the nearest 3
 $query_text = "SELECT * FROM PRODUCTS WHERE photo <> 'Null'";
 $query = $link->prepare($query_text);
 if(!$query->execute()) {
@@ -44,6 +46,7 @@ if ($results) {
 
 $number_of_tiers = (int)(count($list_of_items_with_photo) / 3);
 
+// Displays the featured items on the home page in groups of three
 for ($i = 0; $i < $number_of_tiers; $i++) { 
 	?>
 	<div class="container">
