@@ -50,15 +50,6 @@ sql_connect();
 
 display_top_section();
 
-display_nav_bar();
-
-?>
-
-</head>
-<body>
-
-<?php 
-
 if(!empty($_POST["make_purchase"])) {
 	$customer_id = $_SESSION["current_user"];
 	$product_purchased = (int)$_POST["state"];
@@ -70,7 +61,11 @@ if(!empty($_POST["make_purchase"])) {
 	if(!$query->execute()) {
 		query_error($query_text); return False;
 	}
-	
+}
+
+display_nav_bar();
+
+if(!empty($_POST["make_purchase"])) {
 	?>
 	<div align = "center">
 		<label>Product has been added to your cart.</label>
@@ -78,6 +73,15 @@ if(!empty($_POST["make_purchase"])) {
 	<br>
 	<?php
 }
+
+?>
+
+</head>
+<body>
+
+<?php 
+
+
 
 // Get all relevant data about this object
 $query_text = "SELECT DISTINCT category FROM PRODUCTS ORDER BY category";
@@ -94,7 +98,7 @@ if (!$results) { query_error($query); return False; }
 <form method="post" action="products.php" class="form-inline" role="form">
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-6">
+			<div class="col-xs-3">
 				<div class="row">
 					<div class="col-xs-6 control-label" align = "right">
 						<label for="category">category</label>
@@ -158,12 +162,16 @@ if (!$results) { query_error($query); return False; }
 				} ?>
 				</div>
 			</div>
+			<div class="col-xs-1">
+			</div>
 			<div class="col-xs-6">
 				<div class="panel panel-primary">
 					<div class="panel-body">
-						<img src="<?php echo '/photos/white.jpg'; ?>" class="img-responsive" style="width:100%" onerror="if (this.src != '/photos/image-not-found.png') this.src = '/photos/image-not-found.png';">
+						<img src="<?php echo '/photos/sample_photo.jpg'; ?>" class="img-responsive" style="width:100%" onerror="if (this.src != '/photos/image-not-found.png') this.src = '/photos/image-not-found.png';">
 					</div>
 				</div>
+			</div>
+			<div class="col-xs-2">
 			</div>
 		</div>
 	</div>

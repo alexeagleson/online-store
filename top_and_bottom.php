@@ -3,7 +3,7 @@
 global $store_name;
 global $store_tagline;
 
-$store_name = "Online Store Sample";
+$store_name = "Super Grocery World";
 $store_tagline = "Come Share our Love for Delicious Food or Whatever";
 
 function display_top_section() {
@@ -63,7 +63,7 @@ function display_nav_bar() {
 					<li><a href="products.php">Products</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " Login"; } ?></a></li>
+					<li><a href="login.php"><span class="glyphicon glyphicon-user"></span><?php if(isset($_SESSION["current_user"])) { echo " My Account (" . $_SESSION["current_user"] . ")"; } else { echo " Log in"; } ?></a></li>
 					<?php $cart_count = number_of_items_in_cart(); ?>
 					<li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span><?php if($cart_count) { echo " Cart(" . $cart_count . ")"; } else { echo " Cart"; } ?></a></li>
 				</ul>
@@ -78,10 +78,12 @@ function display_bottom_section() {
 	global $store_tagline;
 	?>
 	<footer class="container-fluid text-center">
-	<p>Get the latest deals from <?php echo $store_name; ?></p>
-	<form class="form-inline">
-		<input type="email" class="form-control" size="50" placeholder="Email Address">
-		<button type="button" class="btn btn-danger">Sign Up</button>
+	<label>Get Our Weekly Flyer::</label>
+	<br>
+	<form class="form-inline" method="post">
+		<input type="email" class="form-control" size="50" placeholder="Email Address (nothing will actually be mailed)">
+		<input type="submit" value="Sign Up" class="btn btn-danger">
+		<br>
 	</form>
 	</footer>
 	<?php

@@ -1,5 +1,13 @@
 <?php
 
+function build_all_database_tables($delete_existing) {
+	create_store_table($delete_existing);
+	create_products_table($delete_existing);
+	create_cart_table($delete_existing);
+	create_customers_table($delete_existing);
+	create_descriptions_table($delete_existing);
+}
+
 // Create the STORE table in the database from scratch
 function create_store_table($delete_existing = False)  {
 	

@@ -23,20 +23,13 @@ sql_connect();
 
 display_top_section();
 
-display_nav_bar();
- 
-?>
-
-</head>
-<body>
-
-<?php
-
 $errusername = '';
 $errPassword = '';
 $username = '';
 $password = '';
 $result = '';
+
+$message_to_display = False;
 
 if (isset($_POST["logout"])) {
 	unset($_SESSION["current_user"]);
@@ -54,24 +47,14 @@ if (isset($_POST["logout"])) {
 	$results = get_all_results_2d_array($query, 'both');
 
 	if (!$results) { 
-	?>
-	<div align = "center">
-		<label>Username does not exist.</label>
-	</div>
-	<br>
-	<?php
+		$message_to_display = "Username does not exist.";
 	} else {
 		$results = $results[0];
 		
 		if ($results['password'] == md5($_POST['password'])) {
 			$_SESSION["current_user"] = $username_entered;
 		} else {
-		?>
-		<div align = "center">
-			<label>Your password is incorrect.</label>
-		</div>
-		<br>
-		<?php
+			$message_to_display = "Your password is incorrect.";
 		}
 	}
 
@@ -111,76 +94,82 @@ if (isset($_POST["logout"])) {
 			query_error($query_text); return False;
 		}
 		
-		?>
-		<div align = "center">
-			<label>Account has been registered.</label>
-		</div>
-		<br>
+		$message_to_display = "Account has been registered.";
 		
-		<?php
 		$_SESSION["current_user"] = $username_entered;
 	
 	} else {
-		?>
-		<div align = "center">
-			<label>Username already in use.</label>
-		</div>
-		<br>
-		<?php
+		$message_to_display = "Username already in use.";
 	}
 }
+
+display_nav_bar();
+
+if ($message_to_display) {
+	?>
+	<div align = "center">
+		<label><?php echo $message_to_display; ?></label>
+	</div>
+	<?php
+}
+
 ?>
+
+</head>
+<body>
+
 <div class="container">
 	<div class="row">
-
-	<?php 
-	if(isset($_SESSION["current_user"])) {
-		?>
-		<h1 class="page-header text-center"><? echo "Welcome " . $_SESSION["current_user"]; ?></h1>
-		<form class="form-horizontal" role="form" method="post" action="login.php">
-			<div class="form-actions">
-				<div class="col-lg-12" align="center">
-					<input id="submit" name="logout" type="submit" value="Log Out" class="btn btn-primary">
-					<br><br>
-				</div>
-			</div>
-		</form>
 		<?php 
-	} else {
-		?>
-		<div class="col-md-6 col-md-offset-3">
-			<h1 class="page-header text-center">Login or Register Account</h1>
+		if(isset($_SESSION["current_user"])) {
+			?>
+			<h1 class="page-header text-center"><? echo "Welcome " . $_SESSION["current_user"]; ?></h1>
 			<form class="form-horizontal" role="form" method="post" action="login.php">
-				<div class="form-group">
-					<label for="username" class="col-sm-2 control-label">username</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" value="<?php if (isset($_POST['username'])) { echo htmlspecialchars($_POST['username']); } else { echo ''; } ?>">
-						<?php echo "<p class='text-danger'>$errusername</p>";?>
+				<div class="form-actions">
+					<div class="col-lg-12" align="center">
+						<input id="submit" name="logout" type="submit" value="Log Out" class="btn btn-primary">
+						<br><br><br>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="password" class="col-sm-2 control-label">password</label>
-					<div class="col-sm-10">
-						<input type="password" class="form-control" id="password" name="password" placeholder="Enter a Password" value="<?php if (isset($_POST['password'])) { echo htmlspecialchars($_POST['password']); } else { echo ''; } ?>">
-						<?php echo "<p class='text-danger'>$errusername</p>";?>
+			</form>
+			<?php 
+		} else {
+			?>
+			<div class="col-md-6 col-md-offset-3">
+				<h1 class="page-header text-center">Log in or Register Account</h1>
+				<form class="form-horizontal" role="form" method="post" action="login.php">
+					<div class="form-group">
+						<label for="username" class="col-sm-2 control-label">username</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" value="<?php if (isset($_POST['username'])) { echo htmlspecialchars($_POST['username']); } else { echo ''; } ?>">
+							<?php echo "<p class='text-danger'>$errusername</p>";?>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-10 col-sm-offset-2">
-						<input id="submit" name="login" type="submit" value="Login" class="btn btn-primary">
-						<input id="submit" name="create_new_account" type="submit" value="Create New Account" class="btn btn-primary">	
+					<div class="form-group">
+						<label for="password" class="col-sm-2 control-label">password</label>
+						<div class="col-sm-10">
+							<input type="password" class="form-control" id="password" name="password" placeholder="Enter a Password" value="<?php if (isset($_POST['password'])) { echo htmlspecialchars($_POST['password']); } else { echo ''; } ?>">
+							<?php echo "<p class='text-danger'>$errusername</p>";?>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-10 col-sm-offset-2">
-						<?php echo $result; ?>	
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<input id="submit" name="login" type="submit" value="Login" class="btn btn-primary">
+							<br><br>
+							<input id="submit" name="create_new_account" type="submit" value="Register New Account" class="btn btn-primary">	
+						</div>
 					</div>
-				</div>
-			</form> 
-		</div>	
-	<?php 
-	}
-	?>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<?php echo $result; ?>	
+						</div>
+					</div>
+				</form>
+				<br>
+			</div>	
+		<?php 
+		}
+		?>
 	</div>
 </div>   
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

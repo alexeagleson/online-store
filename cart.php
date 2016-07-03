@@ -39,24 +39,6 @@ sql_connect();
 
 display_top_section();
 
-display_nav_bar();
- 
-?>
-  
-</head>
-<body>
-
-<?php
-
-if ((number_of_items_in_cart() == False) and (isset($_SESSION["current_user"]))) {
-	?>
-	<div align = "center">
-		<label>Your cart is empty.</label>
-	</div>
-	<br>
-	<?php
-}
-
 if (isset($_POST['product_id_to_remove'])) {
 	// Get all relevant data about this object
 	$query_text = "DELETE FROM CART WHERE product_id = ? AND customer_id = ?";
@@ -75,6 +57,27 @@ if (isset($_POST['submit_your_order'])) {
 	if(!$query->execute()) {
 		query_error($query_text); return False;
 	}
+}
+
+display_nav_bar();
+ 
+?>
+  
+</head>
+<body>
+
+<?php
+
+if ((number_of_items_in_cart() == False) and (isset($_SESSION["current_user"])) and !(isset($_POST['submit_your_order']))) {
+	?>
+	<div align = "center">
+		<label>Your cart is empty.</label>
+	</div>
+	<br>
+	<?php
+}
+
+if (isset($_POST['submit_your_order'])) {
 	?>
 	<div align = "center">
 		<label>Thank you for your order.</label>
@@ -98,11 +101,8 @@ if (isset($_SESSION["current_user"])) {
 	if (!$results) { 
 		// Do nothing
 	} else {
-		
 		$grand_total = 0;
-			
 		?>
-
 		<div class="container">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
@@ -149,6 +149,7 @@ if (isset($_SESSION["current_user"])) {
 			</div>
 			<div class="form-group" style="font-size:18px">
 				<div class="col-sm-6">
+					<?php $grand_total = number_format($grand_total, "2"); ?>
 					<label for="submit_your_order" class="col-sm-6 control-label"><?php echo "Grand Total: $" . $grand_total; ?></label>
 				</div>
 				<div class="col-sm-6">

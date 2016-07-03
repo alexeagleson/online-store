@@ -13,11 +13,7 @@ global $link;
 session_start();
 sql_connect();
 
-create_store_table(False);
-create_products_table(False);
-create_cart_table(False);
-create_customers_table(False);
-create_descriptions_table(False);
+build_all_database_tables(False);
 
 display_top_section();
 
